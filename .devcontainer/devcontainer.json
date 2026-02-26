@@ -1,5 +1,5 @@
 {
-    "name": "ROS 2 Ardupilot Env",
+    "name": "ego-planner-sitl",
     "build": {
         "dockerfile": "Dockerfile",
         "args": {
@@ -10,7 +10,7 @@
     },
     "remoteUser": "ros",
     "runArgs": [
-        "--name", "ardupilot_sitl",
+        "--name", "ego-planner-sitl",
         "--network=host",
         "--privileged",
         "--env=DISPLAY=${env:DISPLAY}",
