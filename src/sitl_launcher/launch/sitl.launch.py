@@ -1,21 +1,30 @@
 import os
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess, IncludeLaunchDescription, TimerAction
+from launch.actions import ExecuteProcess, IncludeLaunchDescription, AppendEnvironmentVariable
 from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import SetParameter
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    # Get config params
+    # Set use_sim_time to True for all nodes
     set_sim_time = SetParameter(name='use_sim_time', value=True)
+
+    # Set GZ_SIM_RESOURCE_PATH to include the models directory of sitl_launcher package and the ArduPilot Gazebo models
+    pkg_share = get_package_share_directory('sitl_launcher')
+    world_path = os.path.join(pkg_share, 'worlds', 'iris_runway_depth.sdf')
+    models_path = os.path.join(pkg_share, 'models')
+
+    set_model_path = AppendEnvironmentVariable(
+        'GZ_SIM_RESOURCE_PATH',
+        f"{models_path}:/home/ros/ardupilot_gazebo/models"
+    )
 
     # Start Gazebo
     gazebo = ExecuteProcess(
-        cmd=['gz sim -v4 -r iris_runway.sdf'],
+        cmd=[f'gz sim -v4 -r {world_path}'],
         shell=True,
         output='screen',
-        
     )
 
     # Start ArduPilot SITL
@@ -43,6 +52,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         set_sim_time,
+        set_model_path,
         gazebo,
         ardupilot_sitl,
         mavros
