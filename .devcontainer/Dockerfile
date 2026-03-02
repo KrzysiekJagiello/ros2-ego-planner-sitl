@@ -14,18 +14,20 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 # 2. Narzedzia, ROS 2, Gazebo Harmonic
 RUN apt-get update && apt-get install -y \
-    nano vim git curl wget lsb-release gnupg python3-pip \
+nano vim git curl wget lsb-release gnupg python3-pip \
     ros-humble-vision-msgs \
     ros-humble-pcl-ros \
     ros-humble-tf2-geometry-msgs \
     ros-humble-image-transport \
     ros-humble-mavros \
     ros-humble-mavros-extras \
+    ros-humble-actuator-msgs \
+    ros-humble-gps-msgs \
     rapidjson-dev \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
     && curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list \
-    && apt-get update && apt-get install -y gz-harmonic ros-humble-ros-gz libgz-sim8-dev \
+    && apt-get update && apt-get install -y gz-harmonic libgz-sim8-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalacja GeographicLib dla MAVROS
@@ -70,3 +72,15 @@ RUN echo "export PATH=\$PATH:/home/$USERNAME/ardupilot/Tools/autotest" >> /home/
     && echo "source /opt/ros/humble/setup.bash" >> /home/$USERNAME/.bashrc
 
 WORKDIR /home/$USERNAME/ros2_ws
+
+# 6. ros_gz_bridge kompilowany ze zrodel (Harmonic)
+RUN mkdir -p src \
+    && cd src \
+    && git clone https://github.com/gazebosim/ros_gz.git -b humble
+
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash \
+    && export GZ_VERSION=harmonic \
+    && export MAKEFLAGS='-j4' \
+    && colcon build --packages-select ros_gz_bridge ros_gz_interfaces --symlink-install"
+
+RUN echo "source /home/$USERNAME/ros2_ws/install/setup.bash" >> /home/$USERNAME/.bashrc
