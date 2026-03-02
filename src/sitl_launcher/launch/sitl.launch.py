@@ -4,6 +4,7 @@ from launch.actions import ExecuteProcess, IncludeLaunchDescription, AppendEnvir
 from launch.launch_description_sources import AnyLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import SetParameter
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
@@ -49,11 +50,18 @@ def generate_launch_description():
                 'namespace': 'mavros'
             }.items()
         )
+    
+    bridge_launch_path = os.path.join(pkg_share, 'launch', 'bridge.launch.py')
+    
+    gz_bridge = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(bridge_launch_path)
+    )
 
     return LaunchDescription([
         set_sim_time,
         set_model_path,
         gazebo,
         ardupilot_sitl,
-        mavros
+        mavros,
+        gz_bridge
     ])

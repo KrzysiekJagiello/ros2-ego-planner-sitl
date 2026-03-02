@@ -1,0 +1,16 @@
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='ros_gz_bridge',
+            executable='parameter_bridge',
+            name='gz_bridge',
+            arguments=[
+                '/camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
+                '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo'
+            ],
+            output='screen'
+        )
+    ])
