@@ -2,8 +2,9 @@ import os
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, IncludeLaunchDescription, AppendEnvironmentVariable
 from launch.launch_description_sources import AnyLaunchDescriptionSource
+from launch.substitutions import Command
 from launch_ros.substitutions import FindPackageShare
-from launch_ros.actions import SetParameter
+from launch_ros.actions import Node, SetParameter
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
@@ -20,6 +21,9 @@ def generate_launch_description():
         'GZ_SIM_RESOURCE_PATH',
         f"{models_path}:/home/ros/ardupilot_gazebo/models"
     )
+
+    # Set path to URDF/Xacro model for drone_state_publisher
+    xacro_file = os.path.join(pkg_share, 'urdf', 'iris_depth.urdf.xacro')
 
     # Start Gazebo
     gazebo = ExecuteProcess(
@@ -51,10 +55,23 @@ def generate_launch_description():
             }.items()
         )
     
+    # Start ROS-Gazebo bridge
     bridge_launch_path = os.path.join(pkg_share, 'launch', 'bridge.launch.py')
     
     gz_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(bridge_launch_path)
+    )
+
+    # Start robot_state_publisher node
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        output='screen',
+        parameters=[{
+            'robot_description': Command(['xacro ', xacro_file]),
+            'use_sim_time': True
+        }]
     )
 
     return LaunchDescription([
@@ -63,5 +80,6 @@ def generate_launch_description():
         gazebo,
         ardupilot_sitl,
         mavros,
-        gz_bridge
+        gz_bridge,
+        robot_state_publisher_node
     ])
