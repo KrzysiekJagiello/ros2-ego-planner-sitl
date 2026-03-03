@@ -23,7 +23,7 @@ def generate_launch_description():
     )
 
     # Set path to URDF/Xacro model for drone_state_publisher
-    xacro_file = os.path.join(pkg_share, 'urdf', 'iris_depth.urdf.xacro')
+    xacro_path = os.path.join(pkg_share, 'urdf', 'iris_depth.urdf.xacro')
 
     # Start Gazebo
     gazebo = ExecuteProcess(
@@ -69,8 +69,7 @@ def generate_launch_description():
         name='robot_state_publisher',
         output='screen',
         parameters=[{
-            'robot_description': Command(['xacro ', xacro_file]),
-            'use_sim_time': True
+            'robot_description': Command(['xacro ', xacro_path])
         }]
     )
 
