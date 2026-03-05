@@ -41,19 +41,15 @@ def generate_launch_description():
     )
 
     # Start MAVROS
-    mavros_launch_path = os.path.join(
-            FindPackageShare('mavros').find('mavros'),
-            'launch',
-            'apm.launch'
-        )
-        
+    my_mavros_launch_path = os.path.join(
+        get_package_share_directory('sitl_launcher'),
+        'launch',
+        'mavros.launch.py' 
+    )
+
     mavros = IncludeLaunchDescription(
-            AnyLaunchDescriptionSource(mavros_launch_path),
-            launch_arguments={
-                'fcu_url': 'udp://127.0.0.1:14551@',
-                'namespace': 'mavros'
-            }.items()
-        )
+        PythonLaunchDescriptionSource(my_mavros_launch_path)
+    )
     
     # Start ROS-Gazebo bridge
     bridge_launch_path = os.path.join(pkg_share, 'launch', 'bridge.launch.py')
