@@ -69,6 +69,16 @@ def generate_launch_description():
         }]
     )
 
+    # Start RViz
+    my_rviz_launch_path = os.path.join(
+        pkg_share,
+        'launch',
+        'rviz.launch.py'
+    )
+    rviz = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(my_rviz_launch_path)
+    )
+
     return LaunchDescription([
         set_sim_time,
         set_model_path,
@@ -76,5 +86,6 @@ def generate_launch_description():
         ardupilot_sitl,
         mavros,
         gz_bridge,
-        robot_state_publisher_node
+        robot_state_publisher_node,
+        rviz
     ])
