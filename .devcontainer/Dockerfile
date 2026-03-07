@@ -24,6 +24,9 @@ nano vim git curl wget lsb-release gnupg python3-pip \
     ros-humble-actuator-msgs \
     ros-humble-gps-msgs \
     rapidjson-dev \
+    libpcl-dev \
+    libvtk9-dev \
+    ros-humble-rmw-cyclonedds-cpp \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
     && curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list \
@@ -66,6 +69,7 @@ RUN cd ardupilot \
 ENV GZ_VERSION=harmonic
 ENV GZ_SIM_SYSTEM_PLUGIN_PATH=/home/$USERNAME/ardupilot_gazebo/build:${GZ_SIM_SYSTEM_PLUGIN_PATH}
 ENV GZ_SIM_RESOURCE_PATH=/home/$USERNAME/ardupilot_gazebo/models:/home/$USERNAME/ardupilot_gazebo/worlds:/home/$USERNAME/ardupilot/Tools/simulation_install/gazebo/models:${GZ_SIM_RESOURCE_PATH}
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 RUN echo "export PATH=\$PATH:/home/$USERNAME/ardupilot/Tools/autotest" >> /home/$USERNAME/.bashrc \
     && echo "export PATH=\$PATH:/home/$USERNAME/.local/bin" >> /home/$USERNAME/.bashrc \
