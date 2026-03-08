@@ -26,6 +26,7 @@ nano vim git curl wget lsb-release gnupg python3-pip \
     rapidjson-dev \
     libpcl-dev \
     libvtk9-dev \
+    ros-humble-xacro \
     ros-humble-rmw-cyclonedds-cpp \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
     && curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
