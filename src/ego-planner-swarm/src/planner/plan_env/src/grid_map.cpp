@@ -137,10 +137,10 @@ void GridMap::initMap(rclcpp::Node::SharedPtr node)
 
   // 初始化 message_filters::Subscriber
   depth_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::Image>>(
-      node_, "grid_map/depth", rclcpp::QoS(50).get_rmw_qos_profile());
+      node_, "grid_map/depth", rclcpp::SensorDataQoS().get_rmw_qos_profile());
 
   extrinsic_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(
-      "/vins_estimator/extrinsic", 10,
+      "/vins_estimator/extrinsic", rclcpp::SensorDataQoS(),
       std::bind(&GridMap::extrinsicCallback, this, std::placeholders::_1));
 
   if (mp_.pose_type_ == POSE_STAMPED)
@@ -166,10 +166,10 @@ void GridMap::initMap(rclcpp::Node::SharedPtr node)
 
   // 使用独立的里程计和点云订阅
   indep_cloud_sub_ = node_->create_subscription<sensor_msgs::msg::PointCloud2>(
-      "grid_map/cloud", 10, std::bind(&GridMap::cloudCallback, this, std::placeholders::_1));
+      "grid_map/cloud", rclcpp::SensorDataQoS(), std::bind(&GridMap::cloudCallback, this, std::placeholders::_1));
 
   indep_odom_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(
-      "grid_map/odom", 10, std::bind(&GridMap::odomCallback, this, std::placeholders::_1));
+      "grid_map/odom", rclcpp::SensorDataQoS(), std::bind(&GridMap::odomCallback, this, std::placeholders::_1));
 
   // 定时器
   occ_timer_ = node_->create_wall_timer(

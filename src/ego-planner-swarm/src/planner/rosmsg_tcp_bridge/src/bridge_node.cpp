@@ -827,9 +827,9 @@ int main(int argc, char *argv[])
   }
 
   other_odoms_sub_ = node->create_subscription<nav_msgs::msg::Odometry>(
-      "my_odom", 10, odom_sub_udp_cb);
+      "my_odom", rclcpp::SensorDataQoS(), odom_sub_udp_cb);
   other_odoms_pub_ = node->create_publisher<nav_msgs::msg::Odometry>(
-      "/others_odom", 10);
+      "/others_odom", rclcpp::SensorDataQoS());
 
   // emergency_stop_sub_ = node->create_subscription<std_msgs::msg::Empty>("emergency_stop_broadcast", 10, emergency_stop_sub_udp_cb);
   // emergency_stop_pub_ = node->create_publisher<std_msgs::msg::Empty>("emergency_stop_recv", 10);

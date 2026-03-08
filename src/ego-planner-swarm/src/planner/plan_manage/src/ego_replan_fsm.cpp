@@ -67,7 +67,7 @@ namespace ego_planner
 
     odom_sub_ = node_->create_subscription<nav_msgs::msg::Odometry>(
         "odom_world",
-        1,
+        rclcpp::SensorDataQoS(),
         [this](const std::shared_ptr<const nav_msgs::msg::Odometry> &msg)
         {
           this->odometryCallback(msg);

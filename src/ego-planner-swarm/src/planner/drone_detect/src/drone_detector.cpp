@@ -13,13 +13,13 @@ namespace detect
 
     // 创建订阅器
     my_odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "odometry", 100, std::bind(&DroneDetector::rcvMyOdomCallback, this, std::placeholders::_1));
+        "odometry", rclcpp::SensorDataQoS(), std::bind(&DroneDetector::rcvMyOdomCallback, this, std::placeholders::_1));
 
     depth_img_sub_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "depth", 50, std::bind(&DroneDetector::rcvDepthImgCallback, this, std::placeholders::_1));
+        "depth", rclcpp::SensorDataQoS(), std::bind(&DroneDetector::rcvDepthImgCallback, this, std::placeholders::_1));
 
     droneX_odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-        "/others_odom", 100, std::bind(&DroneDetector::rcvDroneXOdomCallback, this, std::placeholders::_1));
+        "/others_odom", rclcpp::SensorDataQoS(), std::bind(&DroneDetector::rcvDroneXOdomCallback, this, std::placeholders::_1));
 
     // 创建发布器
     new_depth_img_pub_ = this->create_publisher<sensor_msgs::msg::Image>("new_depth_image", 50);
