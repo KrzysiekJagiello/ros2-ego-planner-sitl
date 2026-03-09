@@ -74,6 +74,7 @@ namespace ego_planner
       }
       else
       {
+        if (local_traj_.empty()) return global_traj_.evaluate(t);
         double tm, tmp;
         local_traj_[0].getTimeSpan(tm, tmp);
         return local_traj_[0].evaluateDeBoor(tm + t - local_start_time_);
@@ -92,6 +93,7 @@ namespace ego_planner
       }
       else
       {
+        if (local_traj_.empty()) return global_traj_.evaluateVel(t);
         double tm, tmp;
         local_traj_[0].getTimeSpan(tm, tmp);
         return local_traj_[1].evaluateDeBoor(tm + t - local_start_time_);
@@ -110,6 +112,7 @@ namespace ego_planner
       }
       else
       {
+        if (local_traj_.empty()) return global_traj_.evaluateAcc(t);
         double tm, tmp;
         local_traj_[0].getTimeSpan(tm, tmp);
         return local_traj_[2].evaluateDeBoor(tm + t - local_start_time_);
