@@ -209,11 +209,6 @@ namespace ego_planner
         changeFSMExecState(GEN_NEW_TRAJ, "TRIG");
       else
       {
-        while (exec_state_ != EXEC_TRAJ)
-        {
-          rclcpp::spin_some(node_);
-          std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        }
         changeFSMExecState(REPLAN_TRAJ, "TRIG");
       }
 
