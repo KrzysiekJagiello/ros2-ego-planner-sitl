@@ -11,11 +11,13 @@ def generate_launch_description():
             # prefix=['gdb -ex run --args'],
             parameters=[{
                 'fsm/flight_type': 1,
+                'fsm/planning_horizon': 7.5,
+                'fsm/planning_horizen_time': 3.0,
+
                 'manager/drone_id': 0,
                 'manager/max_vel': 2.0,
                 'manager/max_acc': 6.0,
                 'manager/max_jerk': 4.0,
-                'manager/planning_horizon': 7.5,
                 'manager/control_points_distance': 0.4,
                 'manager/use_distinctive_trajs': True,
                 'manager/feasibility_tolerance': 0.05,
