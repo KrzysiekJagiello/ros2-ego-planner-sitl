@@ -1,3 +1,5 @@
+// Modified by Krzysztof Jagiello on 2026-03-09: added empty check for local_traj_ to prevent system crash
+
 #ifndef _PLAN_CONTAINER_H_
 #define _PLAN_CONTAINER_H_
 

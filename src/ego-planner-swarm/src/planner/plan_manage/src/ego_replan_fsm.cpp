@@ -1,3 +1,4 @@
+// Modified by Krzysztof Jagiello on 2026-03-11: removed while loop calling rclcpp:spin_some causing executor blockage
 
 #include <ego_planner/ego_replan_fsm.h>
 
